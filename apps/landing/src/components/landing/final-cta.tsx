@@ -1,26 +1,29 @@
+"use client";
+
 import { SectionReveal } from "./section-reveal";
 import { WhatsAppButton } from "./whatsapp-button";
+import { WheatMark } from "./rizqun-logo";
 
 export function FinalCta() {
   return (
     <section className="relative overflow-hidden bg-rizqun-cream py-16 md:py-24">
-      <div aria-hidden className="absolute inset-0 bg-pattern-dots opacity-50" />
-      <div className="relative mx-auto max-w-5xl px-4 sm:px-6">
-        <SectionReveal className="overflow-hidden rounded-[2rem] border border-rizqun-emerald/20 bg-gradient-to-br from-rizqun-emerald to-rizqun-emerald-deep px-6 py-12 text-center shadow-2xl shadow-rizqun-emerald/20 sm:px-12 md:py-16">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-white/10 blur-2xl"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-16 -left-16 h-64 w-64 rounded-full bg-rizqun-gold/20 blur-2xl"
-          />
+      <div aria-hidden className="absolute inset-0 bg-pattern-dots opacity-40" />
+      <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <SectionReveal className="overflow-hidden rounded-[2rem] border border-rizqun-gold/20 bg-gradient-to-br from-rizqun-espresso to-rizqun-ink-soft px-6 py-14 text-center shadow-warm-xl sm:px-12 md:py-16">
+          {/* wheat watermark */}
+          <WheatMark className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 text-rizqun-gold/[0.08]" />
+          <WheatMark className="pointer-events-none absolute -bottom-10 -left-10 h-48 w-48 rotate-12 text-rizqun-gold/[0.06]" />
 
           <div className="relative">
-            <h2 className="text-balance text-2xl font-bold leading-snug text-white sm:text-3xl md:text-4xl">
+            <WheatMark className="mx-auto h-10 w-10 text-rizqun-gold" />
+
+            <h2
+              className="mt-5 text-balance text-2xl font-bold leading-snug text-rizqun-cream sm:text-3xl md:text-4xl"
+              style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
+            >
               একটি ক্লিকেই আপনার প্রয়োজন আমাদের জানান।
             </h2>
-            <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-white/85 sm:text-lg">
+            <p className="mx-auto mt-4 max-w-xl text-pretty text-base text-rizqun-cream/75 sm:text-lg">
               কোনো অ্যাপ ডাউনলোড নেই, কোনো লগইন নেই। শুধু হোয়াটসঅ্যাপে একটি
               মেসেজ—বাকিটা আমাদের দায়িত্ব।
             </p>
@@ -28,13 +31,14 @@ export function FinalCta() {
             <div className="mt-8 flex justify-center">
               <WhatsAppButton
                 size="lg"
-                className="w-full bg-white text-rizqun-emerald-deep shadow-xl hover:bg-rizqun-cream hover:text-rizqun-emerald-deep sm:w-auto"
+                variant="solid"
+                className="w-full bg-[#25D366] text-white hover:brightness-105 sm:w-auto"
               >
                 আজই অর্ডার করুন
               </WhatsAppButton>
             </div>
 
-            <p className="mt-4 text-sm text-white/70">
+            <p className="mt-4 text-sm text-rizqun-cream/60">
               সকাল ৮টা — রাত ১০টা পর্যন্ত সেবা চালু
             </p>
           </div>

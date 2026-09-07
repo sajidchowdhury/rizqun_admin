@@ -7,18 +7,22 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-hind-siliguri), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: var(--font-geist-mono);
 
-  /* Rizqun brand palette */
-  --color-rizqun-emerald: var(--rizqun-emerald);
-  --color-rizqun-emerald-deep: var(--rizqun-emerald-deep);
-  --color-rizqun-emerald-light: var(--rizqun-emerald-light);
-  --color-rizqun-emerald-tint: var(--rizqun-emerald-tint);
+  /* Rizqun brand — Organic Premium / Quiet Luxury palette */
   --color-rizqun-cream: var(--rizqun-cream);
-  --color-rizqun-gold: var(--rizqun-gold);
-  --color-rizqun-gold-light: var(--rizqun-gold-light);
+  --color-rizqun-cream-warm: var(--rizqun-cream-warm);
+  --color-rizqun-paper: var(--rizqun-paper);
   --color-rizqun-ink: var(--rizqun-ink);
+  --color-rizqun-ink-soft: var(--rizqun-ink-soft);
   --color-rizqun-muted: var(--rizqun-muted);
+  --color-rizqun-gold: var(--rizqun-gold);
+  --color-rizqun-gold-deep: var(--rizqun-gold-deep);
+  --color-rizqun-gold-light: var(--rizqun-gold-light);
+  --color-rizqun-border: var(--rizqun-border);
+  --color-rizqun-line: var(--rizqun-line);
+  --color-rizqun-espresso: var(--rizqun-espresso);
 
   /* shadcn semantic tokens (mapped to brand) */
   --color-sidebar-ring: var(--sidebar-ring);
@@ -57,85 +61,85 @@
 }
 
 :root {
-  --radius: 0.75rem;
+  --radius: 1rem;
 
-  /* Rizqun brand */
-  --rizqun-emerald: #0f766e;
-  --rizqun-emerald-deep: #064e3b;
-  --rizqun-emerald-light: #d1fae5;
-  --rizqun-emerald-tint: #ecfdf5;
-  --rizqun-cream: #fbf7ef;
-  --rizqun-gold: #c08a2d;
-  --rizqun-gold-light: #f3e6c6;
-  --rizqun-ink: #16241f;
-  --rizqun-muted: #586b64;
+  /* ─── Rizqun Organic Premium palette ────────────────────────────
+     Warm parchment cream, espresso-brown ink, antique gold.
+     No pure black, no pure white — everything has a warm undertone. */
+  --rizqun-cream: #F5F1E8;          /* page background — warm parchment */
+  --rizqun-cream-warm: #F0EDE6;     /* slightly warmer section bg */
+  --rizqun-paper: #FBF8F1;          /* card surface — lighter cream */
+  --rizqun-ink: #2C2416;            /* espresso — primary text (NOT black) */
+  --rizqun-ink-soft: #3D3425;       /* slightly lighter ink */
+  --rizqun-muted: #8B7E6A;          /* taupe — secondary text */
+  --rizqun-gold: #C9A961;           /* antique gold — accent, wheat motif */
+  --rizqun-gold-deep: #B8964A;      /* darker gold — hover state */
+  --rizqun-gold-light: #E8D9B0;     /* light gold tint — backgrounds */
+  --rizqun-border: #E5DED0;         /* warm light border */
+  --rizqun-line: #C4B8A0;           /* inactive icon stroke */
+  --rizqun-espresso: #2C2416;       /* deep espresso for dark sections */
 
-  /* shadcn semantic (brand-mapped, light only for landing) */
+  /* shadcn semantic (brand-mapped) */
   --background: var(--rizqun-cream);
   --foreground: var(--rizqun-ink);
-  --card: #ffffff;
+  --card: var(--rizqun-paper);
   --card-foreground: var(--rizqun-ink);
-  --popover: #ffffff;
+  --popover: var(--rizqun-paper);
   --popover-foreground: var(--rizqun-ink);
-  --primary: var(--rizqun-emerald);
-  --primary-foreground: #ffffff;
-  --secondary: var(--rizqun-emerald-light);
-  --secondary-foreground: var(--rizqun-emerald-deep);
-  --muted: #eef3f0;
+  --primary: var(--rizqun-ink);
+  --primary-foreground: var(--rizqun-cream);
+  --secondary: var(--rizqun-gold-light);
+  --secondary-foreground: var(--rizqun-ink);
+  --muted: #EDE8DC;
   --muted-foreground: var(--rizqun-muted);
-  --accent: var(--rizqun-emerald-tint);
-  --accent-foreground: var(--rizqun-emerald-deep);
+  --accent: var(--rizqun-gold-light);
+  --accent-foreground: var(--rizqun-ink);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #e6ddcb;
-  --input: #e6ddcb;
-  --ring: var(--rizqun-emerald);
-  --chart-1: var(--rizqun-emerald);
-  --chart-2: var(--rizqun-gold);
-  --chart-3: #4ca58e;
-  --chart-4: #e0b95a;
-  --chart-5: #8aae9e;
-  --sidebar: #ffffff;
+  --border: var(--rizqun-border);
+  --input: var(--rizqun-border);
+  --ring: var(--rizqun-gold);
+  --chart-1: var(--rizqun-gold);
+  --chart-2: #9B8E7A;
+  --chart-3: #C4B8A0;
+  --chart-4: #6B5D4A;
+  --chart-5: #D4C9B0;
+  --sidebar: var(--rizqun-paper);
   --sidebar-foreground: var(--rizqun-ink);
-  --sidebar-primary: var(--rizqun-emerald);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--rizqun-emerald-tint);
-  --sidebar-accent-foreground: var(--rizqun-emerald-deep);
-  --sidebar-border: #e6ddcb;
-  --sidebar-ring: var(--rizqun-emerald);
+  --sidebar-primary: var(--rizqun-ink);
+  --sidebar-primary-foreground: var(--rizqun-cream);
+  --sidebar-accent: var(--rizqun-gold-light);
+  --sidebar-accent-foreground: var(--rizqun-ink);
+  --sidebar-border: var(--rizqun-border);
+  --sidebar-ring: var(--rizqun-gold);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
+  --background: var(--rizqun-espresso);
+  --foreground: var(--rizqun-cream);
+  --card: #3D3425;
+  --card-foreground: var(--rizqun-cream);
+  --popover: #3D3425;
+  --popover-foreground: var(--rizqun-cream);
+  --primary: var(--rizqun-cream);
+  --primary-foreground: var(--rizqun-ink);
+  --secondary: #4A4030;
+  --secondary-foreground: var(--rizqun-cream);
+  --muted: #4A4030;
+  --muted-foreground: #B5A990;
+  --accent: #4A4030;
+  --accent-foreground: var(--rizqun-cream);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
+  --border: oklch(1 0 0 / 12%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --ring: var(--rizqun-gold);
+  --sidebar: #3D3425;
+  --sidebar-foreground: var(--rizqun-cream);
+  --sidebar-primary: var(--rizqun-cream);
+  --sidebar-primary-foreground: var(--rizqun-ink);
+  --sidebar-accent: #4A4030;
+  --sidebar-accent-foreground: var(--rizqun-cream);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: var(--rizqun-gold);
 }
 
 @layer base {
@@ -162,16 +166,27 @@
 }
 
 @layer utilities {
-  /* Subtle Arabic-inspired pattern for section backgrounds */
-  .bg-pattern-dots {
-    background-image: radial-gradient(var(--rizqun-emerald-light) 1px, transparent 1px);
-    background-size: 22px 22px;
-  }
-  .bg-pattern-grid {
+  /* Subtle paper grain texture — gives the cream background a tactile quality */
+  .bg-paper-grain {
+    background-color: var(--rizqun-cream);
     background-image:
-      linear-gradient(to right, rgba(15, 118, 110, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(15, 118, 110, 0.05) 1px, transparent 1px);
-    background-size: 32px 32px;
+      radial-gradient(circle at 20% 30%, rgba(139, 126, 106, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(201, 169, 97, 0.03) 0%, transparent 50%);
+  }
+  /* Very faint dot pattern for section backgrounds */
+  .bg-pattern-dots {
+    background-image: radial-gradient(rgba(139, 126, 106, 0.08) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  /* Warm shadow — diffused, brown-toned (not gray) */
+  .shadow-warm {
+    box-shadow: 0 4px 24px rgba(60, 50, 30, 0.06);
+  }
+  .shadow-warm-lg {
+    box-shadow: 0 12px 40px rgba(60, 50, 30, 0.08);
+  }
+  .shadow-warm-xl {
+    box-shadow: 0 24px 60px rgba(60, 50, 30, 0.10);
   }
   .text-balance {
     text-wrap: balance;
@@ -179,7 +194,13 @@
   .text-pretty {
     text-wrap: pretty;
   }
-  /* hide scrollbar on horizontal scroll rows */
+  /* Wide tracking for uppercase Latin — critical for the luxury feel */
+  .tracking-luxe {
+    letter-spacing: 0.25em;
+  }
+  .tracking-wide-luxe {
+    letter-spacing: 0.15em;
+  }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -187,7 +208,13 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  /* Respect reduced motion */
+  /* Gold gradient text for special accents */
+  .text-gold-gradient {
+    background: linear-gradient(135deg, var(--rizqun-gold) 0%, var(--rizqun-gold-deep) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

@@ -6,25 +6,26 @@ type WhatsAppButtonProps = {
   message?: string;
   children: React.ReactNode;
   className?: ClassValue;
-  variant?: "solid" | "outline" | "gold";
+  variant?: "solid" | "outline" | "gold" | "ink";
   size?: "default" | "lg" | "sm";
 };
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98] disabled:pointer-events-none disabled:opacity-50";
 
 const sizes = {
-  sm: "min-h-11 px-4 text-sm",
-  default: "min-h-12 px-6 text-base",
-  lg: "min-h-14 px-8 text-lg",
+  sm: "min-h-11 px-5 text-sm",
+  default: "min-h-12 px-7 text-base",
+  lg: "min-h-14 px-9 text-lg",
 };
 
 const variants = {
   solid:
-    "bg-rizqun-emerald text-white shadow-lg shadow-rizqun-emerald/25 hover:bg-rizqun-emerald-deep hover:shadow-xl hover:shadow-rizqun-emerald/30",
+    "bg-[#25D366] text-white shadow-lg shadow-[#25D366]/25 hover:brightness-105 hover:shadow-xl hover:shadow-[#25D366]/30",
   outline:
-    "border-2 border-rizqun-emerald/30 bg-white/70 text-rizqun-emerald-deep backdrop-blur hover:border-rizqun-emerald hover:bg-white",
-  gold: "bg-rizqun-gold text-white shadow-lg shadow-rizqun-gold/25 hover:brightness-105",
+    "border-2 border-rizqun-ink/20 bg-transparent text-rizqun-ink hover:border-rizqun-gold hover:bg-rizqun-gold-light/40",
+  gold: "bg-rizqun-gold text-white shadow-lg shadow-rizqun-gold/25 hover:bg-rizqun-gold-deep hover:shadow-xl",
+  ink: "bg-rizqun-ink text-rizqun-cream shadow-lg shadow-rizqun-ink/20 hover:bg-rizqun-ink-soft hover:shadow-xl",
 };
 
 export function WhatsAppButton({
