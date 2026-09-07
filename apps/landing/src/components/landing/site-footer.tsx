@@ -1,7 +1,7 @@
 import { Clock, MapPin, Phone } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-button";
 import { WheatMark } from "./rizqun-logo";
-import { waLink, WHATSAPP_NUMBER } from "@/lib/whatsapp";
+import { useLandingContent, useWaLink } from "@/lib/landing-content";
 
 const QUICK_LINKS = [
   { href: "#neki", label: "নেকির ঝুড়ি" },
@@ -10,17 +10,12 @@ const QUICK_LINKS = [
   { href: "#about", label: "আমাদের কথা" },
 ];
 
-const SERVICES_LIST = [
-  "গ্রোসারি",
-  "ইলেকট্রিক",
-  "ইলেকট্রনিক্স",
-  "মেডিসিন",
-  "ব্লাড",
-  "এম্বুলেন্স",
-];
-
 export function SiteFooter() {
-  const displayNumber = WHATSAPP_NUMBER.replace(
+  const { data } = useLandingContent();
+  const waLink = useWaLink();
+  const { content, services } = data;
+
+  const displayNumber = content.whatsappNumber.replace(
     /^(\d{2})(\d{3})(\d{3})(\d{3,})$/,
     "+$1 $2-$3-$4",
   );
@@ -32,12 +27,14 @@ export function SiteFooter() {
           {/* brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <WheatMark className="h-8 w-8 text-rizqun-gold" />
+              {content.logoUrl ? (
+                <img src={content.logoUrl} alt="রিজকুন" className="h-8 w-auto" />
+              ) : (
+                <WheatMark className="h-8 w-8 text-rizqun-gold" />
+              )}
               <span
                 className="text-xl font-bold tracking-tight"
-                style={{
-                  fontFamily: "var(--font-hind-siliguri), sans-serif",
-                }}
+                style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
               >
                 রিজকুন
               </span>
@@ -82,12 +79,12 @@ export function SiteFooter() {
               সেবা ও যোগাযোগ
             </h3>
             <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5">
-              {SERVICES_LIST.map((s) => (
+              {services.map((s) => (
                 <li
-                  key={s}
+                  key={s.id}
                   className="rounded-full border border-rizqun-cream/15 px-2.5 py-1 text-xs text-rizqun-cream/70"
                 >
-                  {s}
+                  {s.title}
                 </li>
               ))}
             </ul>
@@ -95,7 +92,7 @@ export function SiteFooter() {
               <li className="flex items-center gap-2">
                 <Phone className="h-4 w-4 text-rizqun-gold" />
                 <a
-                  href={`tel:+${WHATSAPP_NUMBER}`}
+                  href={`tel:+${content.whatsappNumber}`}
                   className="transition-colors hover:text-rizqun-gold"
                   dir="ltr"
                 >
@@ -104,7 +101,7 @@ export function SiteFooter() {
               </li>
               <li className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-rizqun-gold" />
-                সকাল ৮টা — রাত ১০টা
+                {content.openingTime} — {content.closingTime}
               </li>
               <li className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-rizqun-gold" />

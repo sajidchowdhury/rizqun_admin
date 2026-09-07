@@ -381,3 +381,81 @@ model Rating {
   @@index([orderId])
   @@map("ratings")
 }
+
+// ─── Landing page content (CMS) ──────────────────────────────────
+//
+// Singleton row (always id=1) storing the landing page's dynamic content.
+// The admin panel edits this via /api/landing-content.
+// The public landing page fetches it via GET /api/landing-content (no auth).
+//
+// If no row exists yet, the API returns hardcoded defaults (see the
+// service's `getDefaults()` function) so the landing page always works.
+
+model LandingContent {
+  id              Int      @id @default(1)
+  // ── Hero ──
+  heroGreeting    String   @default("আসসালামু আলাইকুম") @map("hero_greeting")
+  heroQuestion    String   @default("কী দরকার আজ?") @map("hero_question")
+  // ── Neki ──
+  nekiTitle       String   @default("নেকির ঝুড়ি") @map("neki_title")
+  nekiSubtitle    String   @default("প্রতিটি অর্ডারে ৫% খেদমতে") @map("neki_subtitle")
+  nekiPercentage  Float    @default(5) @map("neki_percentage")
+  nekiMonthlyGoal Int      @default(10000) @map("neki_monthly_goal")
+  nekiCollected   Int      @default(7300) @map("neki_collected")
+  // ── WhatsApp ──
+  whatsappNumber  String   @default("8801000000000") @map("whatsapp_number")
+  whatsappMessage String   @default("আসসালামু আলাইকুম, আমি রিজকুনে অর্ডার করতে চাই") @map("whatsapp_message")
+  // ── Hours ──
+  openingTime     String   @default("সকাল ৮টা") @map("opening_time")
+  closingTime     String   @default("রাত ১০টা") @map("closing_time")
+  // ── Founder ──
+  founderMessage  String   @default("আমরা চাই, আপনার পরিবারের সাথে আমাদের সম্পর্ক হোক H2H (Heart to Heart)। আমরা শুধু পণ্য দিচ্ছি না, আমরা আপনার আমানত বুকে ধরে রাখছি। আপনার বিশ্বস্ততাই আমাদের আখিরাতের সওয়াবের কারণ।") @map("founder_message") @db.Text
+  founderName     String   @default("রিজকুন টিম") @map("founder_name")
+  // ── Logo ──
+  logoUrl         String?  @map("logo_url")
+  // ── Section headings ──
+  servicesHeading String   @default("আপনার দৈনন্দিন যেকোনো প্রয়োজন") @map("services_heading")
+  trustHeading    String   @default("কেন রিজকুনে বিশ্বাস রাখবেন?") @map("trust_heading")
+  // ── Timestamps ──
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@map("landing_content")
+}
+
+// ─── Landing service cards (the 6 categories on the landing page) ──
+
+model LandingService {
+  id          Int      @id @default(autoincrement())
+  order       Int      @default(0)
+  emoji       String   @default("🛒")
+  title       String
+  description String   @db.Text
+  imageUrl    String?  @map("image_url")
+  whatsappKey String   @default("default") @map("whatsapp_key")
+  isActive    Boolean  @default(true) @map("is_active")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("landing_services")
+  @@index([isActive])
+  @@index([order])
+}
+
+// ─── Landing testimonials (customer reviews) ──
+
+model LandingTestimonial {
+  id        Int      @id @default(autoincrement())
+  order     Int      @default(0)
+  name      String
+  location  String
+  quote     String   @db.Text
+  initials  String   @default("র")
+  rating    Int      @default(5)
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("landing_testimonials")
+  @@index([isActive])
+  @@index([order])
+}

@@ -1,19 +1,18 @@
-"use client";
-
 import { SectionReveal } from "./section-reveal";
 import { WhatsAppButton } from "./whatsapp-button";
-import { WheatMark, RizqunLogo } from "./rizqun-logo";
+import { RizqunLogo } from "./rizqun-logo";
+import { useLandingContent } from "@/lib/landing-content";
 
 export function FinalCta() {
+  const { data } = useLandingContent();
+  const { content } = data;
+
   return (
     <section className="relative overflow-hidden bg-dark-section py-16 text-rizqun-cream md:py-24">
       {/* wheat watermarks */}
-      <WheatMark className="pointer-events-none absolute -right-16 top-10 h-72 w-72 text-rizqun-gold/[0.08]" />
-      <WheatMark className="pointer-events-none absolute -left-16 bottom-10 h-56 w-56 rotate-12 text-rizqun-gold/[0.06]" />
-
       <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <SectionReveal>
-          {/* white logo */}
+          {/* logo */}
           <RizqunLogo
             className="[&_*]:!text-rizqun-cream [&_.text-rizqun-gold]:!text-rizqun-gold"
             size="lg"
@@ -45,7 +44,8 @@ export function FinalCta() {
           </div>
 
           <p className="mt-5 text-xs text-rizqun-cream/40">
-            সকাল ৮টা — রাত ১০টা পর্যন্ত সেবা চালু • লাইসেন্স নং: RL-২০২৫-৭৭৪২
+            {content.openingTime} — {content.closingTime} পর্যন্ত সেবা চালু •
+            লাইসেন্স নং: RL-২০২৫-৭৭৪২
           </p>
         </SectionReveal>
       </div>

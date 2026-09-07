@@ -1,6 +1,6 @@
 import { type ClassValue } from "clsx";
 import { cn } from "@/lib/utils";
-import { waLink } from "@/lib/whatsapp";
+import { useWaLink } from "@/lib/landing-content";
 
 type WhatsAppButtonProps = {
   message?: string;
@@ -35,6 +35,7 @@ export function WhatsAppButton({
   variant = "solid",
   size = "default",
 }: WhatsAppButtonProps) {
+  const waLink = useWaLink();
   return (
     <a
       href={waLink(message)}
