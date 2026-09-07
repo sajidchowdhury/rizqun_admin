@@ -4,7 +4,7 @@ import { ShieldCheck, BadgePercent, Truck } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
 import { WhatsAppButton } from "./whatsapp-button";
 import { WheatMark } from "./rizqun-logo";
-import { PhoneMockup } from "./phone-mockup";
+import { HeroVisual } from "./hero-visual";
 
 const PAIN_POINTS = [
   { emoji: "😊", text: "বাজারের ভিড় আর সময়ের অভাবে ক্লান্ত?" },
@@ -89,32 +89,9 @@ export function Hero() {
             </ul>
           </SectionReveal>
 
-          {/* Right: phone mockup */}
+          {/* Right: creative visual */}
           <SectionReveal delay={0.15} className="order-1 md:order-2">
-            <div className="relative mx-auto max-w-[300px] md:max-w-none">
-              {/* glow behind phone */}
-              <div
-                aria-hidden
-                className="absolute inset-0 -z-10 scale-110 rounded-full bg-rizqun-gold/10 blur-3xl"
-              />
-              <PhoneMockup />
-
-              {/* floating badge: neki */}
-              <div className="absolute -left-2 top-1/3 z-20 hidden rotate-[-6deg] rounded-2xl border border-rizqun-gold/30 bg-rizqun-paper/95 px-3 py-2 shadow-warm-lg sm:block">
-                <p className="text-[10px] font-medium uppercase tracking-wide text-rizqun-muted">
-                  প্রতিটি অর্ডারে
-                </p>
-                <p className="text-sm font-bold text-gold">নেকির অংশ যাচ্ছে</p>
-              </div>
-
-              {/* floating badge: delivery */}
-              <div className="absolute -right-2 bottom-1/4 z-20 rotate-[5deg] rounded-2xl border border-rizqun-border bg-rizqun-paper/95 px-3 py-2 shadow-warm-lg">
-                <p className="text-[10px] font-medium uppercase tracking-wide text-rizqun-muted">
-                  ডেলিভারি
-                </p>
-                <p className="text-sm font-bold text-rizqun-ink">নিরাপদ ও দ্রুত</p>
-              </div>
-            </div>
+            <HeroVisual />
           </SectionReveal>
         </div>
       </div>
