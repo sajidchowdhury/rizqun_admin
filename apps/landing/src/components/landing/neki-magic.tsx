@@ -1,32 +1,49 @@
+"use client";
+
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
-import { HeartHandshake, Sparkles, BookOpen } from "lucide-react";
+import { Sparkles, ArrowRight, Heart } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
 import { WhatsAppButton } from "./whatsapp-button";
+import { WheatMark } from "./rizqun-logo";
 
 const NEKI_MESSAGE =
   "আসসালামু আলাইকুম, আমি 'নেকির ঝুড়ি' সম্পর্কে বিস্তারিত জানতে চাই।";
 
 export function NekiMagic() {
   return (
-    <section id="neki" className="relative scroll-mt-20 bg-rizqun-cream py-16 md:py-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
-        <div className="grid items-center gap-10 md:grid-cols-2 md:gap-14">
-          {/* Visual / Neki Meter */}
-          <SectionReveal className="order-1 md:order-2">
+    <section
+      id="neki"
+      className="relative scroll-mt-20 overflow-hidden bg-dark-section-gradient py-16 text-rizqun-cream md:py-24"
+    >
+      {/* wheat watermark */}
+      <WheatMark className="pointer-events-none absolute -right-16 top-10 h-72 w-72 text-rizqun-gold/[0.08]" />
+
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div className="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+          {/* Left: circular visual + flow + progress */}
+          <SectionReveal className="order-1">
             <NekiVisual />
           </SectionReveal>
 
-          {/* Copy */}
-          <SectionReveal className="order-2 md:order-1">
-            <span className="inline-flex items-center gap-2 rounded-full bg-rizqun-gold-light/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-rizqun-gold">
-              <Sparkles className="h-3.5 w-3.5" />
+          {/* Right: copy */}
+          <SectionReveal className="order-2" delay={0.1}>
+            {/* ornamental divider */}
+            <div className="ornament-divider mb-5 justify-start">
+              <Sparkles className="h-4 w-4" />
+            </div>
+
+            <span className="font-serif text-sm font-medium uppercase tracking-luxe text-rizqun-gold">
               নেকির ঝুড়ি
             </span>
-            <h2 className="mt-4 text-balance text-2xl font-bold leading-snug text-rizqun-ink sm:text-3xl md:text-4xl">
-              রিজকুন শুধু একটি ডেলিভারি সার্ভিস নয়।
+            <h2
+              className="mt-3 text-balance text-2xl font-bold leading-snug text-rizqun-cream sm:text-3xl md:text-4xl"
+              style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
+            >
+              রিজকুন শুধু একটি ডেলিভারি সার্ভিস নয়—এটি{" "}
+              <span className="text-gold">আখিরাতের পাথেয়</span>।
             </h2>
-            <p className="mt-4 text-pretty text-base leading-relaxed text-rizqun-muted sm:text-lg">
+            <p className="mt-5 text-pretty text-base leading-relaxed text-rizqun-cream/75 sm:text-lg">
               আপনার প্রতিটি কেনাকাটা থেকে নির্দিষ্ট পারসেন্টেজ সরাসরি{" "}
               <span className="font-semibold text-rizqun-gold">
                 ‘নেকির ঝুড়ি’
@@ -35,17 +52,13 @@ export function NekiMagic() {
               অর্ডারে জুটে যাচ্ছে দুটি কাজ: পরিবারের প্রয়োজন আর আলেমদের খেদমত।
             </p>
 
-            <div className="mt-7 space-y-3">
-              <NekiMeter />
-              <p className="text-sm text-rizqun-muted">
-                প্রতিটি অর্ডার থেকে একটি অংশ স্বয়ংক্রিয়ভাবে আলেম ও মাদ্রাসা
-                খেদমতে বরাদ্দ হয়।
-              </p>
-            </div>
+            <p className="mt-4 text-sm text-rizqun-cream/55">
+              পুনর্বিনিয়োগের অপশনও বেছে নিতে পারবেন—অথবা সরাসরি খেদমতে পাঠাতে পারবেন।
+            </p>
 
             <div className="mt-7">
               <WhatsAppButton variant="gold" message={NEKI_MESSAGE}>
-                বিস্তারিত জানুন
+                এখনই শুরু করুন
               </WhatsAppButton>
             </div>
           </SectionReveal>
@@ -56,95 +69,76 @@ export function NekiMagic() {
 }
 
 function NekiVisual() {
-  return (
-    <div className="relative">
-      {/* image with fallback */}
-      <div className="relative overflow-hidden rounded-[2rem] border border-rizqun-gold-light bg-gradient-to-br from-rizqun-gold-light/40 to-rizqun-cream shadow-xl">
-        <img
-          src="/neki-basket.png"
-          alt="একটি ঝুড়ির অংশ আলেমদের খেদমতে — নেকির ঝুড়ি"
-          className="aspect-[4/3] w-full object-cover"
-          loading="lazy"
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = "none";
-          }}
-        />
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="text-7xl">🤲</span>
-        </div>
-      </div>
-
-      {/* flow chips under image */}
-      <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-        <FlowChip icon="🧺" label="আপনার অর্ডার" />
-        <FlowChip icon="➗" label="একটি অংশ বরাদ্দ" accent />
-        <FlowChip icon="🕌" label="আলেমদের খেদমত" />
-      </div>
-    </div>
-  );
-}
-
-function FlowChip({
-  icon,
-  label,
-  accent,
-}: {
-  icon: string;
-  label: string;
-  accent?: boolean;
-}) {
-  return (
-    <div
-      className={
-        "rounded-xl border px-2 py-3 " +
-        (accent
-          ? "border-rizqun-gold/30 bg-rizqun-gold-light/50"
-          : "border-rizqun-emerald/15 bg-white/70")
-      }
-    >
-      <div className="text-xl" aria-hidden>
-        {icon}
-      </div>
-      <div className="mt-1 text-[11px] font-medium leading-tight text-rizqun-ink/80">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-function NekiMeter() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduce = useReducedMotion();
-  const pct = 5; // 5% of each order goes to the neki fund
+  const goalPct = 73; // 73% of this month's neki goal filled
 
   return (
-    <div ref={ref} className="rounded-2xl border border-rizqun-gold/20 bg-white/70 p-4">
-      <div className="mb-2 flex items-center justify-between text-sm">
-        <span className="flex items-center gap-1.5 font-medium text-rizqun-ink">
-          <BookOpen className="h-4 w-4 text-rizqun-gold" />
-          নেকির ঝুড়ি ফান্ড
+    <div ref={ref} className="flex flex-col items-center gap-8">
+      {/* circular spotlight with basket emoji */}
+      <div className="relative">
+        <div className="flex h-48 w-48 items-center justify-center rounded-full bg-gradient-to-br from-rizqun-gold/20 to-rizqun-gold-deep/20 shadow-2xl md:h-56 md:w-56">
+          <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-br from-rizqun-gold/30 to-rizqun-gold-deep/30 md:h-48 md:w-48">
+            <span className="text-6xl md:text-7xl">🧺</span>
+          </div>
+        </div>
+        {/* small check badge */}
+        <div className="absolute -bottom-2 -right-2 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg">
+          <svg viewBox="0 0 24 24" fill="none" className="h-6 w-6">
+            <path
+              d="M5 13l4 4L19 7"
+              stroke="currentColor"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
+      </div>
+
+      {/* charity flow diagram */}
+      <div className="flex items-center gap-3 text-sm">
+        <span className="rounded-lg bg-white/10 px-3 py-1.5 font-medium">
+          🛒 কেনাকাটা
         </span>
-        <span className="font-bold text-rizqun-gold">{pct}%</span>
+        <ArrowRight className="h-4 w-4 text-rizqun-gold" />
+        <span className="rounded-lg bg-rizqun-gold/20 px-3 py-1.5 font-bold text-rizqun-gold">
+          ৫%
+        </span>
+        <ArrowRight className="h-4 w-4 text-rizqun-gold" />
+        <span className="rounded-lg bg-white/10 px-3 py-1.5 font-medium">
+          🕌 দান
+        </span>
       </div>
-      <div
-        className="relative h-3 w-full overflow-hidden rounded-full bg-rizqun-gold-light/60"
-        role="progressbar"
-        aria-valuenow={pct}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        aria-label="নেকির ঝুড়ি ফান্ড অগ্রগতি"
-      >
-        <motion.div
-          className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-rizqun-gold to-amber-400"
-          initial={{ width: reduce ? "5%" : "0%" }}
-          animate={{ width: inView || reduce ? "5%" : "0%" }}
-          transition={{ duration: 1.2, ease: "easeOut", delay: 0.2 }}
-        />
-      </div>
-      <div className="mt-2 flex items-center gap-1.5 text-xs text-rizqun-muted">
-        <HeartHandshake className="h-3.5 w-3.5 text-rizqun-emerald" />
-        প্রতিটি অর্ডারের {pct}% সরাসরি খেদমতে
+
+      {/* progress bar */}
+      <div className="w-full max-w-sm">
+        <div className="mb-2 flex items-center justify-between text-xs">
+          <span className="flex items-center gap-1.5 font-medium text-rizqun-cream/80">
+            <Heart className="h-3.5 w-3.5 text-emerald-400" fill="currentColor" />
+            এই মাসের নেকির লক্ষ্য
+          </span>
+          <span className="font-bold text-emerald-400">{goalPct}%</span>
+        </div>
+        <div
+          className="progress-track h-3 w-full"
+          role="progressbar"
+          aria-valuenow={goalPct}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="এই মাসের নেকির ঝুড়ি লক্ষ্য অগ্রগতি"
+        >
+          <motion.div
+            className="progress-fill h-full"
+            initial={{ width: reduce ? `${goalPct}%` : "0%" }}
+            animate={{ width: inView || reduce ? `${goalPct}%` : "0%" }}
+            transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
+          />
+        </div>
+        <p className="mt-2 text-center text-[11px] text-rizqun-cream/50">
+          এই মাসে ৳১০,০০০ লক্ষ্যের ৳৭,৩০০ সংগৃহীত হয়েছে
+        </p>
       </div>
     </div>
   );

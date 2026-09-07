@@ -1,5 +1,6 @@
 import { Clock, MapPin, Phone } from "lucide-react";
 import { WhatsAppIcon } from "./whatsapp-button";
+import { WheatMark } from "./rizqun-logo";
 import { waLink, WHATSAPP_NUMBER } from "@/lib/whatsapp";
 
 const QUICK_LINKS = [
@@ -9,11 +10,13 @@ const QUICK_LINKS = [
   { href: "#about", label: "আমাদের কথা" },
 ];
 
-const SERVICES = [
-  "গ্রোসারি ও কাঁচাবাজার",
+const SERVICES_LIST = [
+  "গ্রোসারি",
+  "ইলেকট্রিক",
+  "ইলেকট্রনিক্স",
   "মেডিসিন",
-  "হোম সার্ভিস",
-  "জরুরি সেবা",
+  "ব্লাড",
+  "এম্বুলেন্স",
 ];
 
 export function SiteFooter() {
@@ -23,18 +26,23 @@ export function SiteFooter() {
   );
 
   return (
-    <footer className="mt-auto bg-rizqun-emerald-deep text-white">
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <footer className="mt-auto bg-rizqun-espresso text-rizqun-cream">
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-4">
           {/* brand */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-white">
-                <span className="text-lg font-bold">র</span>
+              <WheatMark className="h-8 w-8 text-rizqun-gold" />
+              <span
+                className="text-xl font-bold tracking-tight"
+                style={{
+                  fontFamily: "var(--font-hind-siliguri), sans-serif",
+                }}
+              >
+                রিজকুন
               </span>
-              <span className="text-xl font-bold tracking-tight">রিজকুন</span>
             </div>
-            <p className="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-white/70">
+            <p className="mt-4 max-w-sm text-pretty text-sm leading-relaxed text-rizqun-cream/70">
               ঘরে বসে হোয়াটসঅ্যাপে অর্ডার করুন। বাজার মূল্যে পবিত্র ও বিশুদ্ধ পণ্য,
               নিরাপদ ডেলিভারি—এবং প্রতিটি কেনাকাটা থেকে নেকির অংশ।
             </p>
@@ -51,7 +59,7 @@ export function SiteFooter() {
 
           {/* quick links */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-white/60">
+            <h3 className="font-serif text-sm font-medium uppercase tracking-luxe text-rizqun-gold">
               দ্রুত লিংক
             </h3>
             <ul className="mt-4 space-y-2.5">
@@ -59,7 +67,7 @@ export function SiteFooter() {
                 <li key={l.href}>
                   <a
                     href={l.href}
-                    className="text-sm text-white/80 transition-colors hover:text-rizqun-gold-light"
+                    className="text-sm text-rizqun-cream/75 transition-colors hover:text-rizqun-gold"
                   >
                     {l.label}
                   </a>
@@ -70,43 +78,43 @@ export function SiteFooter() {
 
           {/* services + contact */}
           <div>
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-white/60">
+            <h3 className="font-serif text-sm font-medium uppercase tracking-luxe text-rizqun-gold">
               সেবা ও যোগাযোগ
             </h3>
-            <ul className="mt-4 space-y-2.5">
-              {SERVICES.map((s) => (
+            <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1.5">
+              {SERVICES_LIST.map((s) => (
                 <li
                   key={s}
-                  className="text-sm text-white/80"
+                  className="rounded-full border border-rizqun-cream/15 px-2.5 py-1 text-xs text-rizqun-cream/70"
                 >
                   {s}
                 </li>
               ))}
             </ul>
-            <ul className="mt-5 space-y-2.5 text-sm text-white/80">
+            <ul className="mt-5 space-y-2.5 text-sm text-rizqun-cream/75">
               <li className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-rizqun-gold-light" />
+                <Phone className="h-4 w-4 text-rizqun-gold" />
                 <a
                   href={`tel:+${WHATSAPP_NUMBER}`}
-                  className="transition-colors hover:text-rizqun-gold-light"
+                  className="transition-colors hover:text-rizqun-gold"
                   dir="ltr"
                 >
                   {displayNumber}
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Clock className="h-4 w-4 text-rizqun-gold-light" />
+                <Clock className="h-4 w-4 text-rizqun-gold" />
                 সকাল ৮টা — রাত ১০টা
               </li>
               <li className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-rizqun-gold-light" />
+                <MapPin className="h-4 w-4 text-rizqun-gold" />
                 ফেনী, বাংলাদেশ
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-10 flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-center text-xs text-white/60 sm:flex-row sm:text-left">
+        <div className="mt-12 flex flex-col items-center justify-between gap-3 border-t border-rizqun-cream/10 pt-6 text-center text-xs text-rizqun-cream/55 sm:flex-row sm:text-left">
           <p>© {new Date().getFullYear()} রিজকুন। সর্বস্বত্ব সংরক্ষিত।</p>
           <p className="flex items-center gap-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-rizqun-gold" />
