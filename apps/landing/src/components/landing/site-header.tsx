@@ -65,7 +65,7 @@ export function SiteHeader() {
 
         <div className="hidden md:block">
           <WhatsAppButton size="sm" variant="ink">
-            অর্ডার করুন
+            যোগাযোগ করুন
           </WhatsAppButton>
         </div>
 

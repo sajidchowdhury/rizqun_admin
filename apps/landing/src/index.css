@@ -215,6 +215,96 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
+  /* Gold keyword highlight — for inline emphasis like "এখন", "নেকির" */
+  .text-gold {
+    color: var(--rizqun-gold-deep);
+  }
+  /* Ornamental golden divider — short line with a diamond/dot in the center */
+  .ornament-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  .ornament-divider::before,
+  .ornament-divider::after {
+    content: "";
+    height: 1px;
+    width: 3rem;
+    background: linear-gradient(
+      to right,
+      transparent,
+      var(--rizqun-gold),
+      transparent
+    );
+  }
+  .ornament-divider::before {
+    background: linear-gradient(
+      to left,
+      var(--rizqun-gold),
+      transparent
+    );
+  }
+  .ornament-divider > * {
+    color: var(--rizqun-gold);
+  }
+  /* Phone mockup device frame */
+  .phone-frame {
+    border-radius: 2.5rem;
+    border: 6px solid #1a1a1a;
+    box-shadow:
+      0 0 0 2px #2a2a2a,
+      0 25px 50px -12px rgba(0, 0, 0, 0.35),
+      0 12px 24px -8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+  }
+  .phone-frame::before {
+    /* dynamic island / notch */
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5rem;
+    height: 1.25rem;
+    background: #1a1a1a;
+    border-radius: 9999px;
+    z-index: 10;
+  }
+  /* Progress bar with rounded caps */
+  .progress-track {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    background: linear-gradient(90deg, #10B981 0%, #34D399 100%);
+    border-radius: 9999px;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  }
+  /* Section color-block transitions (cream ↔ dark) */
+  .bg-dark-section {
+    background-color: #1C1C1C;
+  }
+  .bg-dark-section-gradient {
+    background: linear-gradient(135deg, #1C1C1C 0%, #2C2416 50%, #1C1C1C 100%);
+  }
+  /* Gold CTA button with colored shadow */
+  .btn-gold-glow {
+    background: linear-gradient(135deg, var(--rizqun-gold) 0%, var(--rizqun-gold-deep) 100%);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(201, 169, 110, 0.4);
+  }
+  .btn-gold-glow:hover {
+    box-shadow: 0 6px 20px rgba(201, 169, 110, 0.55);
+    filter: brightness(1.05);
+  }
+  /* Star rating */
+  .star-filled {
+    color: var(--rizqun-gold);
+  }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
