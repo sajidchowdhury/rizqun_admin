@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="bn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f766e" />
+
+    <title>রিজকুন — ঘরে বসে বাজার, মেডিসিন ও জরুরি সেবা</title>
+    <meta
+      name="description"
+      content="বাজারের ভিড় আর সময়ের অভাবে ক্লান্ত? ঘরে বসে হোয়াটসঅ্যাপে একটি মেসেজ দিন। বাজার মূল্যে পবিত্র ও বিশুদ্ধ পণ্য নিরাপদে পৌঁছে যাবে আপনার হাতে। প্রতিটি কেনাকাটা থেকে একটি অংশ সরাসরি আলেমদের খেদমতে যায়।"
+    />
+    <meta
+      name="keywords"
+      content="রিজকুন, rizqun, গ্রোসারি ডেলিভারি, মেডিসিন ডেলিভারি, বাজার মূল্য, অর্ডার, হোয়াটসঅ্যাপ অর্ডার, Feni delivery"
+    />
+    <meta name="author" content="Rizqun" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="bn_BD" />
+    <meta property="og:site_name" content="রিজকুন" />
+    <meta property="og:url" content="https://rizqunbd.com" />
+    <meta property="og:title" content="রিজকুন — ঘরে বসে বাজার, মেডিসিন ও জরুরি সেবা" />
+    <meta
+      property="og:description"
+      content="হোয়াটসঅ্যাপে এক ক্লিকে অর্ডার করুন। বাজার মূল্যে পবিত্র পণ্য, নিরাপদ ডেলিভারি, এবং প্রতিটি কেনাকাটা থেকে নেকির অংশ।"
+    />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="রিজকুন — ঘরে বসে বাজার ও মেডিসিন" />
+    <meta
+      name="twitter:description"
+      content="হোয়াটসঅ্যাপে এক ক্লিকে অর্ডার। বাজার মূল্যে পবিত্র পণ্য, নিরাপদ ডেলিভারি।"
+    />
+
+    <!-- Icons & PWA -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+
+    <!-- Google Fonts: Hind Siliguri (Bengali + Latin) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--
+      Font CSS variables — globals.css references `--font-hind-siliguri` and
+      `--font-geist-mono` (which Next.js's next/font used to inject automatically).
+      We declare them here so the Tailwind v4 `@theme inline` mapping resolves.
+    -->
+    <style>
+      :root {
+        --font-hind-siliguri: 'Hind Siliguri', ui-sans-serif, system-ui, sans-serif;
+        --font-geist-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', 'Courier New', monospace;
+      }
+      html,
+      body {
+        font-family: var(--font-hind-siliguri);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

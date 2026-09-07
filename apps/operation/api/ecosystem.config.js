@@ -1,7 +1,7 @@
 // PM2 ecosystem configuration for Rizqun API
 //
-// Usage:
-//   pm2 start ecosystem.config.js --env production
+// Usage (from repo root):
+//   pm2 start apps/operation/api/ecosystem.config.js --env production
 //   pm2 save
 //   pm2 startup  (enables auto-start on system boot)
 //
@@ -15,6 +15,7 @@ module.exports = {
   apps: [
     {
       name: 'rizqun-api',
+      cwd: __dirname,
       script: 'dist/server.js',
       instances: 1,
       exec_mode: 'fork',

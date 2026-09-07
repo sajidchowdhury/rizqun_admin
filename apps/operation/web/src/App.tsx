@@ -2,8 +2,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { routes } from '@/routes';
 import { Toaster } from '@/components/ui/sonner';
+import { env } from '@/lib/env';
 
-const router = createBrowserRouter(routes);
+// Admin console is served at /operation/ in production. The router basename
+// must match the Vite `base` config so all routes resolve correctly.
+const router = createBrowserRouter(routes, { basename: env.basePath });
 
 function App() {
   return (
