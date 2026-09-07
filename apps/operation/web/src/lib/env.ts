@@ -17,7 +17,14 @@ function required(name: string, fallback: string): string {
 
 export const env = {
   /** Backend API base URL. Must NOT have a trailing slash. */
-  apiBaseUrl: required('API_BASE_URL', 'http://localhost:3000').replace(/\/$/, ''),
+  apiBaseUrl: required('API_BASE_URL', '/api').replace(/\/$/, ''),
+
+  /**
+   * Router basename — must match the Vite `base` config.
+   * In production the admin is served at /operation/, so all routes
+   * are relative to that. In dev (Vite base '/') it's just '/'.
+   */
+  basePath: required('BASE_PATH', '/operation/'),
 } as const;
 
 export type Env = typeof env;

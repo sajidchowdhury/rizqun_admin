@@ -18,6 +18,11 @@ const envSchema = z.object({
   SUPER_ADMIN_PASSWORD: z.string().min(8).default('ChangeMeInProduction123!'),
 
   CORS_ORIGINS: z.string().default('http://localhost:3000,http://localhost:5173'),
+
+  // Prefix for all API routes. In the monorepo deployment, the landing page
+  // is served at /, the admin console at /operation/, and the API at /api/.
+  // Nginx proxies /api/* → this Express server. /health stays at root.
+  API_PREFIX: z.string().default('/api'),
 });
 
 // ─── Parse & validate ───────────────────────────────────────────
@@ -54,4 +59,6 @@ export const env = {
   corsOrigins: parsed.data.CORS_ORIGINS.split(',')
     .map((s) => s.trim())
     .filter(Boolean),
+
+  apiPrefix: parsed.data.API_PREFIX,
 };

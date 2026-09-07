@@ -1,11 +1,33 @@
 # Rizqun
 
-Order management system for receiving customer calls, building orders on the fly, splitting them vendor-wise, and tracking them through delivery.
+**Order-taking hub + admin console for a Bangladeshi grocery, medicine & home-service delivery business.**
 
-> **Stack:** Node.js + Express + PostgreSQL + Prisma + JWT
-> **Status:** Phase 0 — Project setup
+Customers land on a single-page WhatsApp-funnel site, click one button, and order via WhatsApp. Operators manage orders, vendors, products, and deliveries through the admin console.
 
-## Setup
+## Monorepo structure
+
+```
+rizqun/
+├── apps/
+│   ├── landing/              # Public landing page (rizqunbd.com /)
+│   │                         #   Vite + React + Tailwind — static, WhatsApp funnel
+│   └── operation/            # Admin + API
+│       ├── api/              # Express + Prisma + PostgreSQL (rizqunbd.com/api)
+│       └── web/              # Vite + React admin console (rizqunbd.com/operation)
+├── deploy/
+│   ├── nginx/rizqun.conf     # One domain, three locations: /, /operation/, /api/
+│   └── backups/              # DB backup scripts
+└── docs/                     # Plans + guides
+```
+
+| URL | App | Tech |
+|-----|-----|------|
+| `rizqunbd.com/` | Public landing page | Vite + React + Tailwind v4 |
+| `rizqunbd.com/operation/` | Admin/operator console | Vite + React + shadcn/ui |
+| `rizqunbd.com/api/*` | Backend API | Express + Prisma + PostgreSQL |
+| `rizqunbd.com/health` | Health check | Express (no prefix) |
+
+## Quick start
 
 ### Prerequisites
 
@@ -13,369 +35,70 @@ Order management system for receiving customer calls, building orders on the fly
 - npm ≥ 10
 - PostgreSQL ≥ 14
 
-### Database setup
-
-After installing PostgreSQL, create the database and user:
-
-```sql
--- run as a superuser (e.g. `psql -U postgres`)
-CREATE USER rizqun_user WITH PASSWORD 'rizqun_password' CREATEDB;
-CREATE DATABASE rizqun_db OWNER rizqun_user;
-GRANT ALL PRIVILEGES ON DATABASE rizqun_db TO rizqun_user;
-```
-
-> `CREATEDB` is required because Prisma Migrate creates a temporary shadow database during dev migrations.
-
-### Install
+### Install (all workspaces)
 
 ```bash
-git clone https://github.com/sajidchowdhury/rizqun.git
-cd rizqun
-npm ci
+npm install
 ```
 
-### Configure
+### Develop
 
 ```bash
+npm run dev:api       # Express API on :3000
+npm run dev:web       # Admin console on :5173 (proxies /api → :3000)
+npm run dev:landing   # Landing page on :5174
+```
+
+### Database setup (API)
+
+```bash
+cd apps/operation/api
 cp .env.example .env
-# edit .env — set DATABASE_URL, JWT secrets, super admin password
-```
+# edit .env — set DATABASE_URL, JWT secrets, API_PREFIX=/api
 
-> If your shell has a system-wide `DATABASE_URL` env var that conflicts with the one in `.env`, run `unset DATABASE_URL` before starting the server or running migrations. This is purely a development-machine issue.
+# create + migrate
+npx prisma migrate dev --name init
 
-Generate strong JWT secrets:
-
-```bash
-openssl rand -hex 32  # use for JWT_ACCESS_SECRET
-openssl rand -hex 32  # use for JWT_REFRESH_SECRET
-```
-
-### Run in development
-
-```bash
-npm run dev
-```
-
-Server boots on `http://localhost:3000`.
-
-### Verify
-
-```bash
-curl http://localhost:3000/health
-# expected: { "status": "ok", "service": "rizqun-api", ..., "database": { "status": "ok", "latencyMs": <number> } }
-```
-
-### Run migrations
-
-```bash
-unset DATABASE_URL   # if your shell has a system-wide override
-npx prisma migrate dev --name <migration_name>
-```
-
-### Open Prisma Studio (DB GUI)
-
-```bash
-npx prisma studio
-# opens at http://localhost:5555
-```
-
-### Seed the database (categories + super admin)
-
-```bash
-unset DATABASE_URL   # if your shell has a system-wide override
+# seed (categories + super admin)
 npx prisma db seed
 ```
 
-This creates:
-
-- 3 categories: `grocery`, `medicine`, `other`
-- 1 super admin user using `SUPER_ADMIN_EMAIL` and `SUPER_ADMIN_PASSWORD` from `.env`
-
-The seed is **idempotent** — running it multiple times produces the same end state.
-
-### DB smoke test
+### Build all
 
 ```bash
-unset DATABASE_URL && npx tsx scripts/db-smoke-test.ts
+npm run build
+# → apps/landing/dist          (deploy to /var/www/rizqun-landing)
+# → apps/operation/web/dist    (deploy to /var/www/rizqun-operation)
+# → apps/operation/api/dist    (run via PM2)
 ```
 
-> Note: the smoke test deletes all rows in the `users` table. Do not run it against a database with real users.
-
-## Scripts
-
-| Script | Description |
-|--------|-------------|
-| `npm run dev` | Start with hot-reload (tsx watch) |
-| `npm run build` | Compile TypeScript to `dist/` |
-| `npm start` | Run compiled `dist/server.js` |
-| `npm run lint` | Lint all `.ts` files with ESLint |
-| `npm run lint:fix` | Lint and auto-fix where possible |
-| `npm run format` | Format all source files with Prettier |
-| `npm run format:check` | Check formatting without writing (used in CI) |
-| `npx prisma migrate dev --name <name>` | Create + apply a new migration |
-| `npx prisma db seed` | Seed categories + super admin (idempotent) |
-| `npx prisma studio` | Open DB GUI at `localhost:5555` |
-| `npx tsx scripts/db-smoke-test.ts` | Run DB CRUD smoke test (CAUTION: clears users table) |
-
-## Auth & permissions
-
-### Endpoints
-
-| Method | Path | Auth | Description |
-|--------|------|------|-------------|
-| POST | `/auth/login` | public | Login — returns access token + sets refresh cookie |
-| POST | `/auth/refresh` | refresh cookie | Issues new access token + rotates refresh cookie |
-| POST | `/auth/logout` | public | Clears refresh cookie |
-| POST | `/auth/register` | `super_admin` | Creates a new user (operator or super_admin) |
-| GET | `/auth/me` | any authed | Returns the current user |
-| GET | `/vendors` | any authed | List vendors (paginated, filter by `category`/`isActive`/`search`) |
-| GET | `/vendors/:id` | any authed | Get one vendor |
-| POST | `/vendors` | `super_admin` | Create a vendor |
-| PATCH | `/vendors/:id` | `super_admin` | Update a vendor (partial) |
-| DELETE | `/vendors/:id` | `super_admin` | Soft-delete a vendor (blocked if active products exist) |
-| GET | `/products?page=&limit=&categoryId=&vendorId=&isActive=&category=&search=` | any authed | List products (paginated, filterable) |
-| GET | `/products/search?q=&limit=&category=` | any authed | Smart search (FTS + ILIKE fallback, scoped by user's categoryAccess) |
-| GET | `/products/:id` | any authed | Get one product (with category + vendor nested) |
-| POST | `/products` | `super_admin` | Create a product (`search_vector` auto-maintained by trigger) |
-| POST | `/products/quick-add` | any authed (scoped) | Operator-side quick-add — auto-generates SKU, scoped by user's `categoryAccess` |
-| PATCH | `/products/:id` | `super_admin` | Update a product (partial; SKU conflict → 409) |
-| DELETE | `/products/:id` | `super_admin` | Soft-delete a product (`isActive=false`) |
-| POST | `/orders` | any authed (scoped) | Finalize cart — snapshots product name/price, computes totals, creates order + status_log |
-| GET | `/orders?page=&limit=&status=&from=&to=&search=` | any authed (scoped) | Paginated list (operators see own only, super_admin sees all) |
-| GET | `/orders/pending?page=&limit=&customer=` | any authed (scoped) | Pending list — only `pending`/`waiting_vendor`/`preparing`, sorted oldest-first, with `minutesSinceCreated` |
-| GET | `/orders/done?page=&limit=&month=&search=` | any authed (scoped) | Done list — only `delivered`, sorted by `deliveredAt` DESC, filterable by month |
-| GET | `/orders/:id` | any authed (scoped) | Full order detail with items + nested vendor info (404 if not own) |
-| PATCH | `/orders/:id` | any authed (scoped) | Update customer info / deliveryFee (only while editable; recomputes total) |
-| PATCH | `/orders/:id/status` | any authed (scoped) | Update status — validates transition matrix, appends status_log row, sets deliveredAt |
-| GET | `/orders/:id/vendor-groups` | any authed (scoped) | Items grouped by vendor — includes `copyText` (paste-ready for WhatsApp) + `whatsappUrl` (wa.me deep link) |
-| GET | `/orders/:id/audit-log` | any authed (scoped) | Append-only status_log entries (oldest-first) — powers dashboard's "time per step" + operator history view |
-| POST | `/orders/:id/items` | any authed (scoped) | Add item to pending order (sets `addedAfterFinalize=true`, recomputes totals, audit log) |
-| DELETE | `/orders/:id/items/:itemId` | any authed (scoped) | Remove item from pending order (recomputes totals, audit log; can't remove last item) |
-| DELETE | `/orders/:id` | any authed (scoped) | Cancel (soft-delete) — only from pending/waiting_vendor/preparing; preserves audit trail |
-| GET | `/dashboard/summary?month=2026-08` | any authed (scoped) | Monthly summary: `doneCount`, `avgTotalMinutes`, `avgStepMinutes` per transition |
-| GET | `/dashboard/orders-per-day?days=30` | any authed (scoped) | Daily delivered-order count (zero-filled, ready for bar chart) |
-| GET | `/dashboard/avg-time-per-day?days=30` | any authed (scoped) | Daily avg total time in minutes (null-filled, ready for line chart) |
-| GET | `/dashboard/category-breakdown?month=2026-08` | any authed (scoped) | Order count per category (COUNT DISTINCT, ready for donut chart) |
-| POST | `/orders/:id/rating-link` | any authed (scoped) | Generate unique rating URL for delivered order (32-char hex token, idempotent) |
-| GET | `/orders/rating-form/:token` | **public** | Rating form data — returns `orderCode` + `customerName` only (no sensitive data) |
-| POST | `/ratings` | **public** (rate-limited) | Submit rating (1-5 scores + comment) — token consumed on submit (single-use) |
-| GET | `/users?page=&limit=&role=&isActive=&search=` | `super_admin` | List all users (paginated, filterable) |
-| POST | `/users` | `super_admin` | Create a user (validates categoryAccess against existing categories) |
-| PATCH | `/users/:id` | `super_admin` | Update a user (name/email/phone/password/role/categoryAccess/isActive) |
-| DELETE | `/users/:id` | `super_admin` | Soft-delete a user (`isActive=false`) — can't self-delete |
-| GET | `/categories` | any authed | List all categories (id, slug, name, timestamps) |
-| POST | `/categories` | `super_admin` | Create a category (slug must be lowercase alphanumeric) |
-| PATCH | `/categories/:id` | `super_admin` | Update a category (partial: slug, name) |
-| DELETE | `/categories/:id` | `super_admin` | Physically delete a category (blocked if products exist) |
-
-### Middlewares (in `src/middlewares/`)
-
-| Middleware | Purpose |
-|------------|---------|
-| `authenticate` | Verifies `Authorization: Bearer <token>`, sets `req.user` |
-| `requireRole(...roles)` | Allows only the specified roles — must come after `authenticate` |
-| `categoryScope` | Reads `req.user.categoryAccess`, sets `req.categoryFilter` (`{ hasAll, slugs }`) |
-
-### Quick start
+### Production deploy
 
 ```bash
-# 1. Login as super admin (created by seed)
-curl -X POST http://localhost:3000/auth/login \
-  -H 'Content-Type: application/json' \
-  -d '{"email":"admin@rizqun.com","password":"ChangeMeInProduction123!"}'
+# API
+pm2 start apps/operation/api/ecosystem.config.js --env production
 
-# 2. Use the access token
-TOKEN="<from step 1>"
-curl http://localhost:3000/auth/me -H "Authorization: Bearer $TOKEN"
+# Static sites
+cp -r apps/landing/dist /var/www/rizqun-landing
+cp -r apps/operation/web/dist /var/www/rizqun-operation
 
-# 3. Create a new operator (super_admin only)
-curl -X POST http://localhost:3000/auth/register \
-  -H "Authorization: Bearer $TOKEN" \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "name":"Operator 1",
-    "email":"op1@rizqun.com",
-    "phone":"01712345678",
-    "password":"Password123",
-    "role":"user",
-    "categoryAccess":["grocery"]
-  }'
-```
-
-## Schema overview
-
-| Table | Purpose |
-|-------|---------|
-| `users` | Super admins + operators (role enum, JSONB category_access) |
-| `categories` | Product categories (grocery, medicine, other) — seeded |
-| `vendors` | Suppliers (name, phone, whatsapp_number, category enum) |
-| `products` | Catalog items (name, sku, price, category_id, vendor_id, unit, search_vector tsvector) |
-| `orders` | Customer orders (order_code, customer info, subtotal/delivery_fee/total, status enum, rating_token) |
-| `order_items` | Snapshot rows per order (product_id nullable, vendor_id denormalized, name/price snapshot, qty, line_total, added_after_finalize) |
-| `status_log` | Append-only audit trail of every status transition (from_status, to_status, changed_by, note) |
-| `ratings` | Customer rating per order (overall, speed, behavior, comment) — unique on order_id |
-
-### Order status lifecycle
-
-```
-pending → waiting_vendor → preparing → picked_up → delivered
-       ↘               ↘            ↘
-        cancelled      cancelled     cancelled
-```
-
-Any state except `picked_up`/`delivered`/`cancelled` can transition to `cancelled`. `picked_up` → `delivered` is the only valid forward path from `picked_up`.
-
-### Full-text search
-
-`products.search_vector` is a PostgreSQL `tsvector` column auto-maintained by a trigger:
-
-```sql
--- Trigger: products_search_vector_trigger
--- Fires BEFORE INSERT OR UPDATE on products
--- Sets search_vector = to_tsvector('english', name)
-```
-
-A GIN index on `search_vector` enables fast full-text queries:
-
-```sql
-SELECT id, name, ts_rank(search_vector, q) AS rank
-FROM products, to_tsquery('english', 'paracetamol') q
-WHERE search_vector @@ q
-ORDER BY rank DESC
-LIMIT 20;
-```
-
-## Production deployment
-
-### Build
-
-```bash
-npm run build        # compiles TypeScript → dist/
-npm start            # runs dist/server.js in production mode
-```
-
-### PM2 process management
-
-```bash
-# Install PM2 globally
-npm install -g pm2
-
-# Start the app in production mode
-pm2 start ecosystem.config.js --env production
-
-# Save the process list (enables auto-restart on reboot)
-pm2 save
-pm2 startup    # follow the instructions it prints
-
-# View logs
-pm2 logs rizqun-api
-
-# Restart / stop / delete
-pm2 restart rizqun-api
-pm2 stop rizqun-api
-pm2 delete rizqun-api
-```
-
-### Log rotation (install once)
-
-```bash
-pm2 install pm2-logrotate
-pm2 set pm2-logrotate:max_size 10M
-pm2 set pm2-logrotate:retain 30
-pm2 set pm2-logrotate:compress true
-```
-
-### Environment variables
-
-All secrets are loaded from `.env` (never committed). See `.env.example` for the full list. In production, set these via your VPS environment or a `.env` file with restricted permissions (`chmod 600 .env`).
-
-### Nginx reverse proxy + TLS
-
-See [`deploy/nginx/README.md`](./deploy/nginx/README.md) for the full deployment guide.
-
-Quick summary:
-1. Copy `deploy/nginx/rizqun.conf` → `/etc/nginx/sites-available/rizqun`
-2. Replace `YOUR_DOMAIN` with your domain
-3. `certbot --nginx -d yourdomain.com -d www.yourdomain.com`
-4. Update `CORS_ORIGINS` + `APP_BASE_URL` in `.env` to HTTPS
-5. `pm2 restart rizqun-api && systemctl reload nginx`
-
-Features:
-- HTTP → HTTPS 301 redirect
-- TLS 1.2/1.3 with modern ciphers
-- HSTS (1 year, includeSubDomains, preload)
-- SPA fallback for frontend routing
-- Per-route reverse proxy to Node.js on `localhost:3000`
-- Static file caching (30-day expiry)
-- Gzip compression
-- Auto-renewing SSL certificates via Let's Encrypt
-
-### Database backups
-
-See [`deploy/backups/README.md`](./deploy/backups/README.md) for the full guide.
-
-Quick summary:
-```bash
-# Manual backup
-./deploy/backups/backup.sh
-
-# Restore (stops API, drops DB, restores, verifies)
-./deploy/backups/restore.sh backups/rizqun_2026-08-26_020000.sql.gz
-
-# Cron (nightly at 2 AM)
-0 2 * * * /home/rizqun/rizqun/deploy/backups/backup.sh >> /home/rizqun/logs/backup.log 2>&1
-```
-
-- Local retention: 30 days (configurable via `RETENTION_DAYS`)
-- Offsite upload: optional via rclone/aws-cli (S3, Backblaze, etc.)
-- Restore: drops + recreates DB, verifies table/user/order counts
-
-## Code quality
-
-This project uses:
-
-- **ESLint 9** (flat config in `eslint.config.mjs`) with `typescript-eslint` recommended rules
-- **Prettier 3** (config in `.prettierrc.json`) — single quotes, semicolons, trailing commas
-- **EditorConfig** (`.editorconfig`) — UTF-8, LF, 2-space indent
-- **Helmet** — security headers (X-Content-Type-Options, COOP, CORP, CSP)
-- **CORS** — allowlist-based (configured in `src/app.ts` via `env.corsOrigins`)
-- **Rate limiting** (via `express-rate-limit`):
-  - Login: 5 attempts / 15 min per IP (prevents brute-force)
-  - General API: 100 requests / min per IP (prevents abuse/DoS)
-  - Rating submit: 5 requests / hour per IP (already in Session 8.2)
-  - `/health` is exempt from all rate limiting
-
-Key rules:
-
-- `no-console` → warn (allow `console.warn/error/info`); use the `info` variant for startup banners
-- `prefer-const`, `no-var`, `eqeqeq` → error
-- `@typescript-eslint/no-unused-vars` → error, with `_` prefix for intentionally-unused params (`_req`, `_next`)
-- `@typescript-eslint/no-explicit-any` → warn
-- `no-throw-literal` → error (throw `AppError` instances, not strings)
-- `eslint-config-prettier` disables formatting rules that conflict with Prettier
-
-## Project structure
-
-```
-rizqun/
-├── src/
-│   ├── config/         # env, prisma client
-│   ├── modules/        # feature modules (auth, users, products, orders, ...)
-│   ├── middlewares/    # auth, role, category-scope guards
-│   ├── utils/          # response, AppError, helpers
-│   ├── app.ts          # express app + middlewares
-│   └── server.ts       # entry point
-├── prisma/
-│   ├── schema.prisma
-│   ├── migrations/
-│   └── seed.ts
-├── .env.example
-├── package.json
-├── tsconfig.json
-└── README.md
+# Nginx
+cp deploy/nginx/rizqun.conf /etc/nginx/sites-available/rizqun
+ln -s /etc/nginx/sites-available/rizqun /etc/nginx/sites-enabled/
+certbot --nginx -d rizqunbd.com -d www.rizqunbd.com
+nginx -t && systemctl reload nginx
 ```
 
 ## Documentation
 
-- [`implementation-guide.md`](./implementation-guide.md) — full system design
-- [`implementation-plan.md`](./implementation-plan.md) — phase-by-phase build plan
+- [`docs/REPO-REORGANIZATION.md`](./docs/REPO-REORGANIZATION.md) — how the repo was reorganized into a monorepo
+- [`docs/LANDING-IMPLEMENTATION-PLAN.md`](./docs/LANDING-IMPLEMENTATION-PLAN.md) — phase-by-phase landing build plan
+- [`docs/implementation-guide.md`](./docs/implementation-guide.md) — full system design (admin)
+- [`docs/implementation-plan.md`](./docs/implementation-plan.md) — phase-by-phase admin build plan
+
+## Configuration notes
+
+- **WhatsApp number**: set in `apps/landing/src/lib/whatsapp.ts` (`WHATSAPP_NUMBER` constant). All CTAs read from this single source.
+- **API prefix**: all Express routes are mounted under `/api` (configurable via `API_PREFIX` env var). `/health` stays at root.
+- **Admin base path**: the admin Vite app uses `base: '/operation/'` and the React Router `basename` matches.
+- **CORS**: set `CORS_ORIGINS` in `apps/operation/api/.env` to include your production domain.

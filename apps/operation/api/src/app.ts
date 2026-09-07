@@ -72,14 +72,19 @@ app.use(
 app.use(generalApiLimiter);
 
 // ─── Routes ─────────────────────────────────────────────────────
-app.use('/auth', authRoutes);
-app.use('/vendors', vendorRoutes);
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
-app.use('/ratings', ratingRoutes);
-app.use('/users', userRoutes);
-app.use('/categories', categoryRoutes);
-app.use('/dashboard', dashboardRoutes);
+// All API routes are mounted under /api so they can coexist with the
+// public landing page (served at /) and the admin console (served at
+// /operation/) on a single domain via Nginx.
+// In production, Nginx proxies /api/* → this Express server on :3000.
+const API_PREFIX = env.apiPrefix;
+app.use(`${API_PREFIX}/auth`, authRoutes);
+app.use(`${API_PREFIX}/vendors`, vendorRoutes);
+app.use(`${API_PREFIX}/products`, productRoutes);
+app.use(`${API_PREFIX}/orders`, orderRoutes);
+app.use(`${API_PREFIX}/ratings`, ratingRoutes);
+app.use(`${API_PREFIX}/users`, userRoutes);
+app.use(`${API_PREFIX}/categories`, categoryRoutes);
+app.use(`${API_PREFIX}/dashboard`, dashboardRoutes);
 
 // ─── Static files (product images, etc.) ──────────────────────
 // Images are stored in public/uploads/products/ and served at
