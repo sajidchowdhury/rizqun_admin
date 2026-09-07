@@ -1,34 +1,12 @@
-"use client";
-
 import { Quote, Star } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
 import { WheatMark } from "./rizqun-logo";
-
-const TESTIMONIALS = [
-  {
-    quote:
-      "প্রথমে সন্দেহ ছিল, কিন্তু পণ্য হাতে পেয়ে বুঝলাম—দাম ঠিক বাজারের মতো, মান অনেক ভালো। এখন প্রতি সপ্তাহে অর্ডার করি।",
-    name: "আয়েশা সিদ্দিকা",
-    location: "ঢাকা থেকে",
-    initials: "আ",
-  },
-  {
-    quote:
-      "জরুরি মেডিসিন দরকার ছিল রাতে। আধা ঘণ্টায় পৌঁছে দিলেন। নেকির ঝুড়ির কনসেপ্টটাও দারুণ—কেনাকাটায় সওয়াবও জুটছে।",
-    name: "মোহাম্মদ রফিক",
-    location: "ফেনী থেকে",
-    initials: "ম",
-  },
-  {
-    quote:
-      "কর্মীরা খুব বিনয়ী ও আমানতদার। মেয়াদ শেষ পণ্য কখনো দেয়নি। H2H সম্পর্কটা সত্যি অনুভব করা যায়।",
-    name: "ফাতেমা খাতুন",
-    location: "চট্টগ্রাম থেকে",
-    initials: "ফ",
-  },
-];
+import { useLandingContent } from "@/lib/landing-content";
 
 export function Founder() {
+  const { data } = useLandingContent();
+  const { content, testimonials } = data;
+
   return (
     <section
       id="about"
@@ -48,10 +26,7 @@ export function Founder() {
             className="mt-6 text-balance text-xl font-medium leading-relaxed text-rizqun-ink sm:text-2xl md:text-[1.75rem] md:leading-relaxed"
             style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
           >
-            আমরা চাই, আপনার পরিবারের সাথে আমাদের সম্পর্ক হোক{" "}
-            <span className="text-gold">H2H (Heart to Heart)</span>। আমরা শুধু
-            পণ্য দিচ্ছি না, আমরা আপনার আমানত বুকে ধরে রাখছি। আপনার বিশ্বস্ততাই
-            আমাদের আখিরাতের সওয়াবের কারণ।
+            {content.founderMessage}
           </p>
 
           <div className="mt-8 flex flex-col items-center gap-2">
@@ -62,7 +37,7 @@ export function Founder() {
               className="font-semibold text-rizqun-ink"
               style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
             >
-              রিজকুন টিম
+              {content.founderName}
             </p>
             <p className="font-serif text-sm italic text-rizqun-muted">
               Heart to Heart সেবা
@@ -81,15 +56,19 @@ export function Founder() {
 
         {/* testimonial cards */}
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {TESTIMONIALS.map((t, i) => (
-            <SectionReveal key={t.name} delay={i * 0.08} as="article">
+          {testimonials.map((t, i) => (
+            <SectionReveal key={t.id} delay={i * 0.08} as="article">
               <div className="flex h-full flex-col rounded-2xl border border-rizqun-border bg-rizqun-paper p-6 shadow-warm">
                 {/* stars */}
                 <div className="flex gap-0.5">
                   {[...Array(5)].map((_, j) => (
                     <Star
                       key={j}
-                      className="h-4 w-4 fill-rizqun-gold text-rizqun-gold"
+                      className={`h-4 w-4 ${
+                        j < t.rating
+                          ? "fill-rizqun-gold text-rizqun-gold"
+                          : "text-rizqun-border"
+                      }`}
                     />
                   ))}
                 </div>

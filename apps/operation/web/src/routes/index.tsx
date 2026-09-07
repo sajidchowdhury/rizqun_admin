@@ -18,6 +18,7 @@ import { RatingFormPage } from '@/pages/rating-form';
 import { PricesUpdatePage } from '@/pages/prices-update';
 import { PricesHistoryPage } from '@/pages/prices-history';
 import { ImportPage } from '@/pages/import';
+import { LandingContentPage } from '@/pages/landing-content';
 import { NotFoundPage } from '@/pages/not-found';
 
 // ─── Public routes (no shell, no auth) ──────────────────────────────
@@ -85,6 +86,7 @@ const authedRoutes: RouteObject[] = [
             children: [
               { path: 'categories', element: <CategoriesPage /> },
               { path: 'users', element: <UsersPage /> },
+              { path: 'landing-content', element: <LandingContentPage /> },
             ],
           },
         ],

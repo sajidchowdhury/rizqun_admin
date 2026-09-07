@@ -1,16 +1,15 @@
-"use client";
-
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles, ArrowRight, Heart } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
 import { WhatsAppButton } from "./whatsapp-button";
 import { WheatMark } from "./rizqun-logo";
-
-const NEKI_MESSAGE =
-  "আসসালামু আলাইকুম, আমি 'নেকির ঝুড়ি' সম্পর্কে বিস্তারিত জানতে চাই।";
+import { useLandingContent } from "@/lib/landing-content";
 
 export function NekiMagic() {
+  const { data } = useLandingContent();
+  const { content } = data;
+
   return (
     <section
       id="neki"
@@ -34,7 +33,7 @@ export function NekiMagic() {
             </div>
 
             <span className="font-serif text-sm font-medium uppercase tracking-luxe text-rizqun-gold">
-              নেকির ঝুড়ি
+              {content.nekiTitle}
             </span>
             <h2
               className="mt-3 text-balance text-2xl font-bold leading-snug text-rizqun-cream sm:text-3xl md:text-4xl"
@@ -46,7 +45,7 @@ export function NekiMagic() {
             <p className="mt-5 text-pretty text-base leading-relaxed text-rizqun-cream/75 sm:text-lg">
               আপনার প্রতিটি কেনাকাটা থেকে নির্দিষ্ট পারসেন্টেজ সরাসরি{" "}
               <span className="font-semibold text-rizqun-gold">
-                ‘নেকির ঝুড়ি’
+                ‘{content.nekiTitle}’
               </span>{" "}
               ফান্ডে যায়। দুনিয়ার আসবাবকে কাজে লাগিয়ে আখিরাত গড়ুন—আপনার একটি
               অর্ডারে জুটে যাচ্ছে দুটি কাজ: পরিবারের প্রয়োজন আর আলেমদের খেদমত।
@@ -57,7 +56,10 @@ export function NekiMagic() {
             </p>
 
             <div className="mt-7">
-              <WhatsAppButton variant="gold" message={NEKI_MESSAGE}>
+              <WhatsAppButton
+                variant="gold"
+                message="আসসালামু আলাইকুম, আমি 'নেকির ঝুড়ি' সম্পর্কে বিস্তারিত জানতে চাই।"
+              >
                 এখনই শুরু করুন
               </WhatsAppButton>
             </div>
@@ -69,10 +71,19 @@ export function NekiMagic() {
 }
 
 function NekiVisual() {
+  const { data } = useLandingContent();
+  const { content } = data;
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduce = useReducedMotion();
-  const goalPct = 73; // 73% of this month's neki goal filled
+
+  const goalPct =
+    content.nekiMonthlyGoal > 0
+      ? Math.min(
+          100,
+          Math.round((content.nekiCollected / content.nekiMonthlyGoal) * 100),
+        )
+      : 0;
 
   return (
     <div ref={ref} className="flex flex-col items-center gap-8">
@@ -104,7 +115,7 @@ function NekiVisual() {
         </span>
         <ArrowRight className="h-4 w-4 text-rizqun-gold" />
         <span className="rounded-lg bg-rizqun-gold/20 px-3 py-1.5 font-bold text-rizqun-gold">
-          ৫%
+          {content.nekiPercentage}%
         </span>
         <ArrowRight className="h-4 w-4 text-rizqun-gold" />
         <span className="rounded-lg bg-white/10 px-3 py-1.5 font-medium">
@@ -137,7 +148,8 @@ function NekiVisual() {
           />
         </div>
         <p className="mt-2 text-center text-[11px] text-rizqun-cream/50">
-          এই মাসে ৳১০,০০০ লক্ষ্যের ৳৭,৩০০ সংগৃহীত হয়েছে
+          এই মাসে ৳{content.nekiMonthlyGoal.toLocaleString("bn-BD")} লক্ষ্যের ৳
+          {content.nekiCollected.toLocaleString("bn-BD")} সংগৃহীত হয়েছে
         </p>
       </div>
     </div>

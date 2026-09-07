@@ -16,6 +16,7 @@ import dashboardRoutes from './modules/dashboard/dashboard.routes';
 import ratingRoutes from './modules/ratings/ratings.routes';
 import userRoutes from './modules/users/users.routes';
 import categoryRoutes from './modules/categories/categories.routes';
+import landingContentRoutes from './modules/landing-content/landing-content.routes';
 
 const app = express();
 
@@ -84,6 +85,7 @@ app.use(`${API_PREFIX}/orders`, orderRoutes);
 app.use(`${API_PREFIX}/ratings`, ratingRoutes);
 app.use(`${API_PREFIX}/users`, userRoutes);
 app.use(`${API_PREFIX}/categories`, categoryRoutes);
+app.use(`${API_PREFIX}/landing-content`, landingContentRoutes);
 app.use(`${API_PREFIX}/dashboard`, dashboardRoutes);
 
 // ─── Static files (product images, etc.) ──────────────────────

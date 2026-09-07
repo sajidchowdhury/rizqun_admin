@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import {
   Leaf,
@@ -13,35 +11,36 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { WheatMark } from "./rizqun-logo";
+import { useLandingContent } from "@/lib/landing-content";
 
-type Tile = {
-  icon: LucideIcon;
-  label: string;
-  color: string;
-  bg: string;
+// Map whatsappKey → icon
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  grocery: Leaf,
+  electric: Zap,
+  electronics: Smartphone,
+  medicine: Pill,
+  blood: Droplet,
+  ambulance: Ambulance,
 };
 
-const TILES: Tile[] = [
-  { icon: Leaf, label: "গ্রোসারি", color: "text-emerald-600", bg: "bg-emerald-50" },
-  { icon: Zap, label: "ইলেকট্রিক", color: "text-amber-600", bg: "bg-amber-50" },
-  { icon: Smartphone, label: "ইলেকট্রনিক্স", color: "text-blue-600", bg: "bg-blue-50" },
-  { icon: Pill, label: "মেডিসিন", color: "text-teal-600", bg: "bg-teal-50" },
-  { icon: Droplet, label: "ব্লাড", color: "text-rose-600", bg: "bg-rose-50" },
-  { icon: Ambulance, label: "এম্বুলেন্স", color: "text-red-600", bg: "bg-red-50" },
-];
+// Map whatsappKey → icon color classes
+const SERVICE_COLORS: Record<string, { color: string; bg: string }> = {
+  grocery: { color: "text-emerald-600", bg: "bg-emerald-50" },
+  electric: { color: "text-amber-600", bg: "bg-amber-50" },
+  electronics: { color: "text-blue-600", bg: "bg-blue-50" },
+  medicine: { color: "text-teal-600", bg: "bg-teal-50" },
+  blood: { color: "text-rose-600", bg: "bg-rose-50" },
+  ambulance: { color: "text-red-600", bg: "bg-red-50" },
+};
 
 /**
- * Creative "WOW" hero visual — replaces the phone mockup.
- *
- * A floating composition of cards representing the Rizqun service hub:
- *   - Greeting card (আসসালামু আলাইকুম / কী দরকার আজ?)
- *   - 6 service tiles in a creative grid
- *   - নেকির ঝুড়ি floating badge (৫% খেদমতে)
- *   - ডেলিভারি নিরাপদ ও দ্রুত floating badge
- *
- * Responsive: stacks vertically on mobile, floats on desktop.
+ * Creative "WOW" hero visual — floating card composition.
+ * All text is dynamic (from the landing content API).
  */
 export function HeroVisual() {
+  const { data } = useLandingContent();
+  const { content, services } = data;
+
   return (
     <div className="relative mx-auto w-full max-w-md md:max-w-lg">
       {/* glow behind composition */}
@@ -60,19 +59,27 @@ export function HeroVisual() {
         {/* Greeting */}
         <div className="text-center">
           <div className="flex items-center justify-center gap-2">
-            <WheatMark className="h-6 w-6 text-rizqun-gold" />
+            {content.logoUrl ? (
+              <img
+                src={content.logoUrl}
+                alt="রিজকুন"
+                className="h-6 w-auto"
+              />
+            ) : (
+              <WheatMark className="h-6 w-6 text-rizqun-gold" />
+            )}
             <span
               className="text-lg font-bold text-rizqun-ink"
               style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
             >
-              আসসালামু আলাইকুম
+              {content.heroGreeting}
             </span>
           </div>
           <p
             className="mt-1 text-2xl font-bold text-rizqun-gold-deep md:text-3xl"
             style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
           >
-            কী দরকার আজ?
+            {content.heroQuestion}
           </p>
         </div>
 
@@ -83,32 +90,40 @@ export function HeroVisual() {
 
         {/* Service tiles — 3×2 grid */}
         <div className="grid grid-cols-3 gap-2.5">
-          {TILES.map((t, i) => (
-            <motion.div
-              key={t.label}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{
-                duration: 0.4,
-                delay: 0.2 + i * 0.06,
-                ease: "backOut",
-              }}
-              whileHover={{ y: -3, scale: 1.04 }}
-              className="group flex flex-col items-center gap-1.5 rounded-xl border border-rizqun-border/60 bg-white p-3 shadow-sm transition-shadow hover:shadow-warm"
-            >
-              <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${t.bg} ${t.color} transition-transform group-hover:scale-110`}
+          {services.slice(0, 6).map((s, i) => {
+            const Icon = SERVICE_ICONS[s.whatsappKey] ?? Leaf;
+            const colors = SERVICE_COLORS[s.whatsappKey] ?? SERVICE_COLORS.grocery;
+            return (
+              <motion.div
+                key={s.id}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{
+                  duration: 0.4,
+                  delay: 0.2 + i * 0.06,
+                  ease: "backOut",
+                }}
+                whileHover={{ y: -3, scale: 1.04 }}
+                className="group flex flex-col items-center gap-1.5 rounded-xl border border-rizqun-border/60 bg-white p-3 shadow-sm transition-shadow hover:shadow-warm"
               >
-                <t.icon className="h-5 w-5" strokeWidth={1.5} />
-              </div>
-              <span
-                className="text-[11px] font-semibold text-rizqun-ink"
-                style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
-              >
-                {t.label}
-              </span>
-            </motion.div>
-          ))}
+                <div
+                  className={`flex h-10 w-10 items-center justify-center rounded-lg ${colors.bg} ${colors.color} transition-transform group-hover:scale-110`}
+                >
+                  {s.emoji ? (
+                    <span className="text-xl">{s.emoji}</span>
+                  ) : (
+                    <Icon className="h-5 w-5" strokeWidth={1.5} />
+                  )}
+                </div>
+                <span
+                  className="text-[11px] font-semibold text-rizqun-ink"
+                  style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
+                >
+                  {s.title}
+                </span>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Neki highlight strip inside card */}
@@ -121,14 +136,14 @@ export function HeroVisual() {
               className="text-sm font-bold text-rizqun-gold-deep"
               style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
             >
-              নেকির ঝুড়ি
+              {content.nekiTitle}
             </p>
             <p className="text-[11px] text-rizqun-muted">
-              প্রতিটি অর্ডারে ৫% খেদমতে
+              {content.nekiSubtitle}
             </p>
           </div>
           <span className="rounded-full bg-rizqun-gold px-2.5 py-1 text-[10px] font-bold text-white">
-            ৫%
+            {content.nekiPercentage}%
           </span>
         </div>
       </motion.div>

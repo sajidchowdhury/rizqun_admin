@@ -1,63 +1,12 @@
-"use client";
-
 import { ArrowLeft } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
-import { waLinks } from "@/lib/whatsapp";
-
-type Service = {
-  emoji: string;
-  title: string;
-  desc: string;
-  link: string;
-  image: string;
-};
-
-const SERVICES: Service[] = [
-  {
-    emoji: "🛒",
-    title: "গ্রোসারি",
-    desc: "তাজা শাকসবজি, পরিষ্কার মুদির প্যাকেজ ও নিত্যপ্রয়োজনীয় পণ্য—বাজার মূল্যে।",
-    link: waLinks.grocery,
-    image: "/services/grocery.jpg",
-  },
-  {
-    emoji: "⚡",
-    title: "ইলেকট্রিক",
-    desc: "ইলেকট্রিশিয়ান ও ইলেকট্রিক সাপোর্ট—বিশ্বস্ত ও অভিজ্ঞ কর্মী দিয়ে।",
-    link: waLinks.electric,
-    image: "/services/electric.jpg",
-  },
-  {
-    emoji: "📱",
-    title: "ইলেকট্রনিক্স",
-    desc: "ইলেকট্রনিক্স পণ্য ও গ্যাজেট—যাচাই করে নিরাপদে ডেলিভারি।",
-    link: waLinks.electronics,
-    image: "/services/electronics.jpg",
-  },
-  {
-    emoji: "💊",
-    title: "মেডিসিন",
-    desc: "প্রেসক্রিপশন অনুযায়ী ওষুধ—ফার্মেসি থেকে যাচাই করে ডেলিভারি।",
-    link: waLinks.medicine,
-    image: "/services/medicine.jpg",
-  },
-  {
-    emoji: "🩸",
-    title: "ব্লাড",
-    desc: "জরুরি রক্তের প্রয়োজনে দ্রুত সহায়তা—যখন সবচেয়ে দরকার।",
-    link: waLinks.blood,
-    image: "/services/blood.jpg",
-  },
-  {
-    emoji: "🚑",
-    title: "এম্বুলেন্স",
-    desc: "এম্বুলেন্স সেবা—নিরাপদ ও দ্রুত পরিবহন, ২৪/৭ উপলব্ধ।",
-    link: waLinks.ambulance,
-    image: "/services/ambulance.jpg",
-  },
-];
+import { useLandingContent, useServiceWaLink } from "@/lib/landing-content";
 
 export function Services() {
+  const { data } = useLandingContent();
+  const getServiceLink = useServiceWaLink();
+  const { content, services } = data;
+
   return (
     <section
       id="services"
@@ -72,7 +21,7 @@ export function Services() {
             className="mt-3 text-balance text-2xl font-bold leading-snug text-rizqun-ink sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
           >
-            আপনার দৈনন্দিন যেকোনো প্রয়োজন
+            {content.servicesHeading}
           </h2>
           <p className="mt-4 text-pretty text-base text-rizqun-muted sm:text-lg">
             আমরা বিশ্বস্তভাবে আপনার দরজায় পৌঁছে দেব। দাম বা ক্যাটালগ নিয়ে বিরক্ত
@@ -82,26 +31,27 @@ export function Services() {
 
         {/* photo-card grid */}
         <div className="mt-14 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <SectionReveal key={s.title} delay={i * 0.06} as="article">
+          {services.map((s, i) => (
+            <SectionReveal key={s.id} delay={i * 0.06} as="article">
               <a
-                href={s.link}
+                href={getServiceLink(s.whatsappKey)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-rizqun-border bg-rizqun-paper shadow-warm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm-lg"
               >
                 {/* photo top */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-rizqun-gold-light/30">
-                  <img
-                    src={s.image}
-                    alt={s.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                    onError={(e) => {
-                      const t = e.currentTarget as HTMLImageElement;
-                      t.style.display = "none";
-                    }}
-                  />
+                  {s.imageUrl && (
+                    <img
+                      src={s.imageUrl}
+                      alt={s.title}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  )}
                   {/* fallback emoji */}
                   <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                     <span className="text-5xl">{s.emoji}</span>
@@ -123,7 +73,7 @@ export function Services() {
                     {s.title}
                   </h3>
                   <p className="mt-1.5 flex-1 text-sm leading-relaxed text-rizqun-muted">
-                    {s.desc}
+                    {s.description}
                   </p>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-rizqun-gold-deep transition-all group-hover:gap-2">
                     বিস্তারিত দেখুন

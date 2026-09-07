@@ -2,6 +2,7 @@
 
 import { BadgePercent, ShieldCheck, Crown, Smartphone } from "lucide-react";
 import { SectionReveal } from "./section-reveal";
+import { useLandingContent } from "@/lib/landing-content";
 
 const POINTS = [
   {
@@ -31,6 +32,7 @@ const POINTS = [
 ];
 
 export function Trust() {
+  const { data } = useLandingContent();
   return (
     <section
       id="trust"
@@ -45,7 +47,7 @@ export function Trust() {
             className="mt-3 text-balance text-2xl font-bold leading-snug text-rizqun-ink sm:text-3xl md:text-4xl"
             style={{ fontFamily: "var(--font-hind-siliguri), sans-serif" }}
           >
-            কেন রিজকুনে বিশ্বাস রাখবেন?
+            {data.content.trustHeading}
           </h2>
           <p className="mt-4 text-pretty text-base text-rizqun-muted sm:text-lg">
             আমরা শুধু পণ্য পৌঁছে দিই না—আপনার আমানত ও সময় রক্ষা করি।

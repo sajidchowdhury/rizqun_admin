@@ -10,6 +10,7 @@ import {
   PencilLine,
   History,
   Upload,
+  Globe,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -34,4 +35,5 @@ export const NAV_ITEMS: NavItem[] = [
   { label: 'Vendors', to: '/vendors', icon: Store },
   { label: 'Categories', to: '/categories', icon: Tags, adminOnly: true },
   { label: 'Users', to: '/users', icon: Users, adminOnly: true },
+  { label: 'Website Content', to: '/landing-content', icon: Globe, adminOnly: true },
 ];

@@ -1,9 +1,7 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { WhatsAppIcon } from "./whatsapp-button";
-import { waLink } from "@/lib/whatsapp";
+import { useWaLink } from "@/lib/landing-content";
 
 /**
  * Fixed, always-visible WhatsApp button (bottom-right).
@@ -12,6 +10,7 @@ import { waLink } from "@/lib/whatsapp";
  */
 export function FloatingWhatsApp() {
   const [show, setShow] = useState(false);
+  const waLink = useWaLink();
 
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 320);
